@@ -1,0 +1,1119 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>منشئ ملف الإعدادات</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0f1117;
+        --surface: #181b24;
+        --surface2: #1e2130;
+        --border: #2a2f45;
+        --border-focus: #5b7fff;
+        --accent: #5b7fff;
+        --accent2: #ff6b6b;
+        --accent3: #43e8a0;
+        --text: #e8ecf8;
+        --text2: #8890b0;
+        --text3: #555e80;
+        --radius: 10px;
+        --radius-lg: 16px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: "Noto Sans Arabic", sans-serif;
+        min-height: 100vh;
+        padding: 32px 16px 80px;
+      }
+
+      .page-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .page-header h1 {
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        background: linear-gradient(135deg, #5b7fff, #43e8a0);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 8px;
+      }
+
+      .page-header p {
+        color: var(--text2);
+        font-size: 14px;
+      }
+
+      .container {
+        max-width: 860px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      /* ── Card ── */
+      .card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 24px;
+      }
+
+      .card-title {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text2);
+        text-transform: uppercase;
+        letter-spacing: 1.2px;
+        margin-bottom: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .card-title::before {
+        content: "";
+        display: inline-block;
+        width: 3px;
+        height: 14px;
+        background: var(--accent);
+        border-radius: 2px;
+      }
+
+      /* ── Field ── */
+      .field {
+        margin-bottom: 16px;
+      }
+      .field:last-child {
+        margin-bottom: 0;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text2);
+        margin-bottom: 6px;
+      }
+
+      input[type="text"],
+      textarea,
+      select {
+        width: 100%;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text);
+        font-family: "Noto Sans Arabic", sans-serif;
+        font-size: 14px;
+        padding: 10px 14px;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+      }
+
+      input[type="text"]:focus,
+      textarea:focus,
+      select:focus {
+        border-color: var(--border-focus);
+        box-shadow: 0 0 0 3px rgba(91, 127, 255, 0.15);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 72px;
+      }
+
+      select {
+        cursor: pointer;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238890b0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: left 12px center;
+      }
+
+      /* ── Language Toggle ── */
+      .lang-toggle {
+        display: flex;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+        width: fit-content;
+      }
+
+      .lang-toggle input {
+        display: none;
+      }
+
+      .lang-toggle label {
+        padding: 8px 24px;
+        cursor: pointer;
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text3);
+        margin: 0;
+        transition: all 0.2s;
+        user-select: none;
+      }
+
+      .lang-toggle input:checked + label {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      /* ── Theme Radio ── */
+      .theme-options {
+        display: flex;
+        gap: 12px;
+      }
+
+      .theme-option input {
+        display: none;
+      }
+
+      .theme-option label {
+        display: flex;
+        flex-direction: column;
+        width: 200px;
+        padding: 8px;
+        border: 2px solid var(--border);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.2s;
+        background: var(--surface2);
+        margin: 0;
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--text2);
+        text-align: center;
+      }
+
+      .theme-option input:checked + label {
+        border-color: var(--accent);
+        color: var(--text);
+        background: rgba(91, 127, 255, 0.1);
+      }
+
+      .theme-img {
+        width: 100%;
+        aspect-ratio: 16/9;
+        object-fit: cover;
+        border-radius: 6px;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      /* ── Sets Section ── */
+      .sets-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .sets-grid.three-cols {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+
+      .set-count-toggle {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+
+      .set-count-toggle span {
+        font-size: 13px;
+        color: var(--text2);
+      }
+
+      .pill-toggle {
+        display: flex;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        overflow: hidden;
+        padding: 3px;
+        gap: 3px;
+      }
+
+      .pill-toggle button {
+        background: none;
+        border: none;
+        color: var(--text3);
+        padding: 5px 16px;
+        border-radius: 16px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        font-family: "Noto Sans Arabic", sans-serif;
+        transition: all 0.2s;
+      }
+
+      .pill-toggle button.active {
+        background: var(--accent);
+        color: #fff;
+      }
+
+      .set-card {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 14px;
+      }
+
+      .set-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        color: var(--accent);
+        background: rgba(91, 127, 255, 0.1);
+        padding: 3px 10px;
+        border-radius: 20px;
+        margin-bottom: 10px;
+      }
+
+      /* ── Elements ── */
+      .elements-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .element-card {
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 16px;
+        position: relative;
+        transition: border-color 0.2s;
+      }
+
+      .element-card:hover {
+        border-color: var(--border-focus);
+      }
+
+      .element-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 14px;
+      }
+
+      .element-num {
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--accent);
+        background: rgba(91, 127, 255, 0.1);
+        padding: 3px 10px;
+        border-radius: 20px;
+        letter-spacing: 0.5px;
+      }
+
+      .element-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+      }
+
+      .element-grid .field {
+        margin-bottom: 0;
+      }
+      .element-grid .field.full {
+        grid-column: 1 / -1;
+      }
+
+      /* ── File Input ── */
+      .file-input-wrap {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--surface2);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        overflow: hidden;
+      }
+
+      .file-input-wrap input[type="file"] {
+        display: none;
+      }
+
+      .file-btn {
+        background: var(--surface);
+        border: none;
+        border-left: 1px solid var(--border);
+        color: var(--text2);
+        padding: 10px 14px;
+        font-size: 13px;
+        cursor: pointer;
+        font-family: "Noto Sans Arabic", sans-serif;
+        white-space: nowrap;
+        transition: background 0.2s;
+        order: 1;
+      }
+
+      .file-btn:hover {
+        background: var(--border);
+      }
+
+      .file-name {
+        flex: 1;
+        font-size: 13px;
+        color: var(--text3);
+        padding: 10px 14px;
+        font-family: "IBM Plex Mono", monospace;
+        direction: ltr;
+        text-align: right;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .file-name.has-file {
+        color: var(--accent3);
+      }
+
+      /* ── Buttons ── */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 10px 20px;
+        border-radius: var(--radius);
+        font-size: 13px;
+        font-weight: 600;
+        font-family: "Noto Sans Arabic", sans-serif;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+      }
+
+      .btn-ghost {
+        background: var(--surface2);
+        color: var(--text2);
+        border: 1px solid var(--border);
+      }
+
+      .btn-ghost:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      .btn-danger {
+        background: rgba(255, 107, 107, 0.1);
+        color: var(--accent2);
+        border: 1px solid rgba(255, 107, 107, 0.2);
+        padding: 6px 12px;
+        font-size: 12px;
+      }
+
+      .btn-danger:hover {
+        background: rgba(255, 107, 107, 0.2);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+        padding: 12px 28px;
+        font-size: 15px;
+      }
+
+      .btn-primary:hover {
+        background: #4a6dee;
+        transform: translateY(-1px);
+        box-shadow: 0 6px 20px rgba(91, 127, 255, 0.3);
+      }
+
+      .add-element-wrap {
+        display: flex;
+        justify-content: center;
+        margin-top: 6px;
+      }
+
+      .generate-wrap {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+      }
+
+      /* ── Hint checkbox ── */
+      .checkbox-field {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .checkbox-field input {
+        display: none;
+      }
+
+      .custom-check {
+        width: 18px;
+        height: 18px;
+        border: 2px solid var(--border);
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+        flex-shrink: 0;
+      }
+
+      .checkbox-field input:checked ~ .custom-check {
+        background: var(--accent);
+        border-color: var(--accent);
+      }
+
+      .checkbox-field input:checked ~ .custom-check::after {
+        content: "✓";
+        color: #fff;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .checkbox-field span {
+        font-size: 13px;
+        color: var(--text2);
+      }
+
+      /* ── Output ── */
+      .output-wrap {
+        display: none;
+      }
+
+      .output-wrap.visible {
+        display: block;
+      }
+
+      .output-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      .output-code {
+        background: #0a0c12;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        font-family: "IBM Plex Mono", monospace;
+        font-size: 12px;
+        color: #a8c4ff;
+        white-space: pre;
+        overflow-x: auto;
+        max-height: 400px;
+        overflow-y: auto;
+        direction: ltr;
+        text-align: left;
+        line-height: 1.6;
+      }
+
+      .btn-copy {
+        background: var(--surface2);
+        color: var(--text2);
+        border: 1px solid var(--border);
+        padding: 7px 14px;
+        font-size: 12px;
+        border-radius: 7px;
+        cursor: pointer;
+        font-family: "Noto Sans Arabic", sans-serif;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .btn-copy:hover {
+        border-color: var(--accent3);
+        color: var(--accent3);
+      }
+      .btn-copy.copied {
+        color: var(--accent3);
+        border-color: var(--accent3);
+      }
+
+      .btn-download {
+        background: var(--accent3);
+        color: #0f1117;
+        border: none;
+        padding: 10px 22px;
+        font-size: 13px;
+        font-weight: 700;
+        border-radius: var(--radius);
+        cursor: pointer;
+        font-family: "Noto Sans Arabic", sans-serif;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 7px;
+      }
+
+      .btn-download:hover {
+        background: #33d98a;
+        transform: translateY(-1px);
+      }
+
+      .divider {
+        height: 1px;
+        background: var(--border);
+        margin: 4px 0 20px;
+      }
+
+      /* scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 3px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-header">
+      <h1>JSON Generator</h1>
+    </div>
+
+    <div class="container">
+      <!-- ── 1. Language ── -->
+      <div class="card">
+        <div class="card-title">اللغة</div>
+        <div class="lang-toggle">
+          <input type="radio" name="lang" id="lang-ar" value="AR" checked />
+          <label for="lang-ar">عربي</label>
+          <input type="radio" name="lang" id="lang-en" value="EN" />
+          <label for="lang-en">English</label>
+        </div>
+      </div>
+
+      <!-- ── 2. Theme ── -->
+      <div class="card">
+        <div class="card-title">Theme</div>
+        <div class="theme-options">
+          <div class="theme-option">
+            <input
+              type="radio"
+              name="theme"
+              id="theme-nature"
+              value="nature"
+              checked
+            />
+            <label for="theme-nature">
+              <img src="nature.jpg" class="theme-img" alt="Nature" />
+              <span>Nature</span>
+            </label>
+          </div>
+          <div class="theme-option">
+            <input
+              type="radio"
+              name="theme"
+              id="theme-digital"
+              value="digital"
+            />
+            <label for="theme-digital">
+              <img src="digital.jpg" class="theme-img" alt="Digital" />
+              <span>Digital</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 3. Question ── -->
+      <div class="card">
+        <div class="card-title">نص السؤال</div>
+        <div class="field">
+          <input
+            type="text"
+            id="question-text"
+            placeholder="أدخل نص السؤال هنا..."
+          />
+        </div>
+      </div>
+
+      <!-- ── 4. Sets ── -->
+      <div class="card">
+        <div class="card-title">المجموعات (Sets)</div>
+        <div class="set-count-toggle">
+          <span>عدد المجموعات:</span>
+          <div class="pill-toggle">
+            <button class="active" onclick="setSetsCount(2, this)">٢</button>
+            <button onclick="setSetsCount(3, this)">٣</button>
+          </div>
+        </div>
+        <div class="sets-grid" id="sets-grid">
+          <div class="set-card">
+            <div class="set-badge">set_1</div>
+            <div class="field" style="margin-bottom: 0">
+              <label id="set1-label">اسم المجموعة الأولى</label>
+              <input
+                type="text"
+                id="set1-name"
+                placeholder="مثال: مواد مغناطيسية"
+              />
+            </div>
+          </div>
+          <div class="set-card">
+            <div class="set-badge">set_2</div>
+            <div class="field" style="margin-bottom: 0">
+              <label id="set2-label">اسم المجموعة الثانية </label>
+              <input
+                type="text"
+                id="set2-name"
+                placeholder="مثال: مواد غير مغناطيسية"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 5. Elements ── -->
+      <div class="card">
+        <div class="card-title">العناصر</div>
+        <div class="elements-list" id="elements-list"></div>
+        <div class="add-element-wrap" style="margin-top: 16px">
+          <button class="btn btn-ghost" onclick="addElement()">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+            >
+              <path d="M12 5v14M5 12h14" />
+            </svg>
+            إضافة عنصر
+          </button>
+        </div>
+      </div>
+
+      <!-- ── Generate ── -->
+      <div class="generate-wrap">
+        <button class="btn btn-primary" onclick="generate()">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+          >
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+          </svg>
+          توليد ملف JSON
+        </button>
+      </div>
+
+      <!-- ── Output ── -->
+      <div class="card output-wrap" id="output-wrap">
+        <div class="output-header">
+          <div class="card-title" style="margin-bottom: 0">الملف الناتج</div>
+          <div style="display: flex; gap: 8px">
+            <button class="btn-copy" id="copy-btn" onclick="copyJSON()">
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="9" y="9" width="13" height="13" rx="2" />
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+              </svg>
+              نسخ
+            </button>
+            <button class="btn-download" onclick="downloadJSON()">
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2.5"
+              >
+                <path
+                  d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"
+                />
+              </svg>
+              تحميل data.json
+            </button>
+          </div>
+        </div>
+        <div class="divider"></div>
+        <div class="output-code" id="output-code"></div>
+      </div>
+    </div>
+
+    <script>
+      // ── State ──
+      let setsCount = 2;
+      let elementCount = 0;
+      let currentLang = "AR";
+
+      // ── Language ──
+      document.querySelectorAll('input[name="lang"]').forEach((r) => {
+        r.addEventListener("change", () => {
+          currentLang = r.value;
+          updateLabels();
+        });
+      });
+
+      function updateLabels() {
+        const isAR = currentLang === "AR";
+        document.getElementById("question-label").textContent =
+          `نص السؤال (${currentLang})`;
+        document.getElementById("question-text").placeholder = isAR
+          ? "أدخل نص السؤال هنا..."
+          : "Enter your question here...";
+        document.getElementById("set1-label").textContent =
+          `اسم المجموعة الأولى `;
+        document.getElementById("set2-label").textContent =
+          `اسم المجموعة الثانية `;
+        const s3l = document.getElementById("set3-label");
+        if (s3l) s3l.textContent = `اسم المجموعة الثالثة `;
+        document.querySelectorAll(".el-label-lbl").forEach((el) => {
+          el.textContent = `التسمية `;
+        });
+        document.querySelectorAll(".el-hint-lbl").forEach((el) => {
+          el.textContent = `الـ Hint `;
+        });
+        document.querySelectorAll(".el-syshint-lbl").forEach((el) => {
+          el.textContent = `الـ System Hint `;
+        });
+      }
+
+      // ── Sets Count ──
+      function setSetsCount(n, btn) {
+        setsCount = n;
+        document
+          .querySelectorAll(".pill-toggle button")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const grid = document.getElementById("sets-grid");
+        if (n === 3) {
+          grid.classList.add("three-cols");
+          if (!document.getElementById("set3-card")) {
+            const div = document.createElement("div");
+            div.className = "set-card";
+            div.id = "set3-card";
+            div.innerHTML = `
+        <div class="set-badge">set_3</div>
+        <div class="field" style="margin-bottom:0">
+          <label id="set3-label">اسم المجموعة الثالثة (${currentLang})</label>
+          <input type="text" id="set3-name" placeholder="مثال: مواد محايدة">
+        </div>`;
+            grid.appendChild(div);
+          }
+          document.getElementById("set3-card").style.display = "";
+        } else {
+          grid.classList.remove("three-cols");
+          const s3 = document.getElementById("set3-card");
+          if (s3) s3.style.display = "none";
+        }
+        // Rebuild dropdowns
+        document
+          .querySelectorAll(".el-answer-select")
+          .forEach((sel) => rebuildSelect(sel));
+      }
+
+      function rebuildSelect(sel) {
+        const val = sel.value;
+        sel.innerHTML = "";
+        for (let i = 1; i <= setsCount; i++) {
+          const opt = document.createElement("option");
+          opt.value = `set_${i}`;
+          opt.textContent = `set_${i}`;
+          sel.appendChild(opt);
+        }
+        if (val && val <= `set_${setsCount}`) sel.value = val;
+      }
+
+      // ── Elements ──
+      function addElement() {
+        elementCount++;
+        const id = elementCount;
+        const list = document.getElementById("elements-list");
+        const div = document.createElement("div");
+        div.className = "element-card";
+        div.id = `el-${id}`;
+
+        let setOptions = "";
+        for (let i = 1; i <= setsCount; i++) {
+          setOptions += `<option value="set_${i}">set_${i}</option>`;
+        }
+
+        div.innerHTML = `
+    <div class="element-header">
+      <span class="element-num">عنصر #${id}</span>
+      <button class="btn btn-danger" onclick="removeElement(${id})">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        حذف
+      </button>
+    </div>
+    <div class="element-grid">
+      <div class="field">
+        <label class="el-label-lbl">التسمية </label>
+        <input type="text" id="el-${id}-label" placeholder="مثال: حديد">
+      </div>
+      <div class="field">
+        <label>الصورة (اختياري)</label>
+        <div class="file-input-wrap">
+          <input type="file" id="el-${id}-file" accept="image/*" onchange="handleFile(${id}, this)">
+          <span class="file-name" id="el-${id}-filename">لم يتم الاختيار</span>
+          <button class="file-btn" onclick="document.getElementById('el-${id}-file').click()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            رفع
+          </button>
+        </div>
+      </div>
+      <div class="field full">
+        <label class="el-hint-lbl">الـ Hint  <span style="color:var(--accent2);font-size:11px">*مطلوب</span></label>
+        <input type="text" id="el-${id}-hint" placeholder="ملاحظة توضيحية تظهر للطالب">
+      </div>
+      <div class="field full">
+        <label class="el-syshint-lbl">الـ System Hint  <span style="color:var(--text3);font-size:11px">اختياري</span></label>
+        <input type="text" id="el-${id}-syshint" placeholder="في حالة ان السيستم جاوب">
+      </div>
+      <div class="field">
+        <label>الإجابة الصحيحة</label>
+        <select class="el-answer-select" id="el-${id}-answer">${setOptions}</select>
+      </div>
+    </div>
+  `;
+        list.appendChild(div);
+
+        // animate in
+        div.style.opacity = "0";
+        div.style.transform = "translateY(10px)";
+        requestAnimationFrame(() => {
+          div.style.transition = "opacity .25s, transform .25s";
+          div.style.opacity = "1";
+          div.style.transform = "translateY(0)";
+        });
+      }
+
+      function handleFile(id, input) {
+        const fn = document.getElementById(`el-${id}-filename`);
+        if (input.files && input.files[0]) {
+          fn.textContent = input.files[0].name;
+          fn.classList.add("has-file");
+        } else {
+          fn.textContent = "لم يتم الاختيار";
+          fn.classList.remove("has-file");
+        }
+      }
+
+      function removeElement(id) {
+        const el = document.getElementById(`el-${id}`);
+        el.style.transition = "opacity .2s, transform .2s";
+        el.style.opacity = "0";
+        el.style.transform = "translateY(-8px)";
+        setTimeout(() => el.remove(), 200);
+      }
+
+      // ── Generate ──
+      function generate() {
+        const lang = document.querySelector('input[name="lang"]:checked').value;
+        const theme = document.querySelector(
+          'input[name="theme"]:checked',
+        ).value;
+        const questionText = document
+          .getElementById("question-text")
+          .value.trim();
+
+        if (!questionText) {
+          alert("من فضلك أدخل نص السؤال");
+          return;
+        }
+
+        // Sets
+        const set1 = document.getElementById("set1-name").value.trim();
+        const set2 = document.getElementById("set2-name").value.trim();
+        if (!set1 || !set2) {
+          alert("من فضلك أدخل أسماء المجموعات");
+          return;
+        }
+
+        const setsLabel = {
+          set_1: { [lang]: set1 },
+          set_2: { [lang]: set2 },
+        };
+        if (setsCount === 3) {
+          const set3 = document.getElementById("set3-name")?.value.trim() || "";
+          if (!set3) {
+            alert("من فضلك أدخل اسم المجموعة الثالثة");
+            return;
+          }
+          setsLabel.set_3 = { [lang]: set3 };
+        }
+
+        // Elements
+        const elements = [];
+        const cards = document.querySelectorAll(".element-card");
+        for (let i = 0; i < cards.id; i++) {} // just iterate
+
+        let valid = true;
+        cards.forEach((card, idx) => {
+          const id = card.id.replace("el-", "");
+          const label =
+            document.getElementById(`el-${id}-label`)?.value.trim() || "";
+          const hint =
+            document.getElementById(`el-${id}-hint`)?.value.trim() || "";
+          const syshint =
+            document.getElementById(`el-${id}-syshint`)?.value.trim() || "";
+          const answer =
+            document.getElementById(`el-${id}-answer`)?.value || "set_1";
+          const fileInput = document.getElementById(`el-${id}-file`);
+          const fileName = fileInput?.files[0]?.name || "";
+
+          if (!label && !fileName) {
+            alert(`العنصر #${idx + 1}: لازم تدخل اسم أو صورة على الأقل`);
+            valid = false;
+            return;
+          }
+          if (!hint) {
+            alert(`العنصر #${idx + 1}: الـ Hint مطلوب`);
+            valid = false;
+            return;
+          }
+
+          const el = {
+            id: `element_${idx + 1}`,
+            label: { [lang]: label },
+            hint: { [lang]: hint },
+            system_hint: { [lang]: syshint },
+            answer,
+          };
+          if (fileName) el.img = `pics/${fileName}`;
+
+          elements.push(el);
+        });
+
+        if (!valid) return;
+        if (elements.length === 0) {
+          alert("أضف عنصراً واحداً على الأقل");
+          return;
+        }
+
+        // Build JSON
+        const json = {
+          language: lang,
+          theme: theme,
+          background: "pics/background-game.png",
+          themeGraphics: {
+            startFrame: "startFrame.jpg",
+            resultsFrame: "resultsFrame.jpg",
+            instructionsOverlay: "instructionsOverlay.jpg",
+            playGameFrame: "playGameFrame.jpg",
+            green: "green.jpg",
+            yellow: "yellow.jpg",
+            red: "red.jpg",
+            nature: { font: "'Noto Sans Arabic', sans-serif" },
+            digital: { font: "Arial, Helvetica, sans-serif" },
+          },
+          question: { text: { [lang]: questionText } },
+          setsLabel,
+          elements,
+          note: { AR: "توضيح", EN: "Note:" },
+          continue: { AR: "متابعة", EN: "Continue" },
+          score: { AR: "النتيجة", EN: "Score" },
+          progress: { AR: "التقدم", EN: "Progress" },
+          retake: { AR: "العب مرة أخرى ", EN: "Retake Quiz" },
+          feedback_right: {
+            AR: ["أحسنت", "ممتاز", "إجابة صحيحة"],
+            EN: ["Well done", "Excellent!", "Correct answer"],
+          },
+          feedback_wrong: {
+            AR: ["حاول مرة أخرى", "إجابة غير صحيحة"],
+            EN: ["Try again", "Wrong answer"],
+          },
+          results: {
+            AR: "النتيجة",
+            EN: "Results",
+            great: {
+              title: { AR: "ممتاز", EN: "Excellent" },
+              AR: "أحسنت! أداؤك ممتاز ويُظهر فهمًا جيِّدًا لمحتوى الدرس",
+              EN: "Excellent! Your performance is outstanding and shows a good understanding of the lesson content.",
+            },
+            goodjob: {
+              title: { AR: "جيد جداً", EN: "Very Good" },
+              AR: "أداؤك جيّد، و فهمت جزءًا كبيرًا من الدرس. واصل المحاولة لتحسين نتيجتك",
+              EN: "Good job! You have a good understanding of the lesson. Keep trying to improve your score.",
+            },
+            fair: {
+              title: { AR: "حاول مرة أخرى", EN: "Try Again" },
+              AR: "راجع الدرس وجرب من جديد، مع الممارسة سيتحسّن أداؤك",
+              EN: "Nice try, review the lesson and try again. With practice, your performance will improve.",
+            },
+          },
+        };
+
+        const output = JSON.stringify(json, null, 2);
+        document.getElementById("output-code").textContent = output;
+        const wrap = document.getElementById("output-wrap");
+        wrap.classList.add("visible");
+        wrap.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        // store for download
+        window._generatedJSON = output;
+      }
+
+      function copyJSON() {
+        if (!window._generatedJSON) return;
+        navigator.clipboard.writeText(window._generatedJSON).then(() => {
+          const btn = document.getElementById("copy-btn");
+          btn.classList.add("copied");
+          btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> تم النسخ`;
+          setTimeout(() => {
+            btn.classList.remove("copied");
+            btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> نسخ`;
+          }, 2500);
+        });
+      }
+
+      function downloadJSON() {
+        if (!window._generatedJSON) return;
+        const blob = new Blob([window._generatedJSON], {
+          type: "application/json",
+        });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "data.json";
+        a.click();
+        URL.revokeObjectURL(a.href);
+      }
+
+      // Start with one element
+      addElement();
+    </script>
+  </body>
+</html>
